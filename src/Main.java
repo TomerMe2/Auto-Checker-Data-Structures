@@ -11,12 +11,13 @@ public class Main {
             "0.8939_0.8815\n" +
             "111111_1,123456_0,donald_1,login_0,hellow_1,password_0,starwars_1,welcome_1,zxcvbnm_1").split("\n");
 
+    //TO RUN THIS CHECKER, javac -version and java -version MUST SHOW VALUES IN CMD
     public static void main(String[] args) {
         try {
             String workingDir = System.getProperty("user.dir");
             Process cmndPr = Runtime.getRuntime().exec("javac -d " + workingDir + " src\\*.java");
             cmndPr.waitFor();
-            executeCommandLine("java Runner 32 32 2", false, false, 1000);
+            executeCommandLine("java Runner 32 32 2", 1000);
             BufferedReader theirsRdr = new BufferedReader(new FileReader("output.txt"));
             String line = theirsRdr.readLine();
             boolean hasPassed = true;
@@ -27,27 +28,22 @@ public class Main {
                 }
                 if (lineInd != 3) {
                     if (!(outTest1[lineInd].equals(line.replace("\n", "")))) {
-                        System.out.println("You have not passed the " + lineInd + " row");
                         hasPassed = false;
                     }
                 }
                 lineInd++;
                 line = theirsRdr.readLine();
             }
-            if (hasPassed) {
-                System.out.println("You have passed! :)");
-            }
-            else {
-                System.out.println("You have not passed :(");
-            }
+            String toPrint;
+            toPrint = hasPassed ? "You have passed! :)" : "You have not passed";
+            System.out.println(toPrint);
         } catch (Exception e) {
             System.out.println("something went wrong");
             e.printStackTrace();
         }
     }
 
-    public static int executeCommandLine(final String commandLine, final boolean printOutput, final boolean printError,
-                                         final long timeout)
+    private static void executeCommandLine(final String commandLine, final long timeout)
             throws IOException, InterruptedException, TimeoutException {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(commandLine);
@@ -55,10 +51,9 @@ public class Main {
         worker.start();
         try {
             worker.join(timeout);
-            if (worker.exit != null)
-                return worker.exit;
-            else
+            if (worker.exit == null) {
                 throw new TimeoutException();
+            }
         } catch(InterruptedException ex) {
             worker.interrupt();
             Thread.currentThread().interrupt();
@@ -78,7 +73,7 @@ public class Main {
             try {
                 exit = process.waitFor();
             } catch (InterruptedException ignore) {
-                return;
+
             }
         }
     }
