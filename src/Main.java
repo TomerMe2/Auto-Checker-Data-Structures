@@ -55,7 +55,7 @@ public class Main {
             try {
                 exit = process.waitFor();
             } catch (InterruptedException ignore) {
-                return;
+
             }
         }
     }
