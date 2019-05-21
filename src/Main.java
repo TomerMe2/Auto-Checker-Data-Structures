@@ -17,7 +17,7 @@ public class Main {
             String workingDir = System.getProperty("user.dir");
             Process cmndPr = Runtime.getRuntime().exec("javac -d " + workingDir + " src\\*.java");
             cmndPr.waitFor();
-            executeCommandLine("java Runner 32 32 2", 1000);
+            executeCommandLine("java Runner 32 32 2", 4000);
             BufferedReader theirsRdr = new BufferedReader(new FileReader("output.txt"));
             String line = theirsRdr.readLine();
             boolean hasPassed = true;
