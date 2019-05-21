@@ -5,11 +5,11 @@ import java.util.concurrent.TimeoutException;
 
 public class Main {
 
-    private static String[] outTest1 = ("0.4\n" +
-            "15\n" +
+    private static String[] outTest1 = ("0.3\n" +
+            "14\n" +
             "111111_2,123456_1,donald_2,google_0,hellow_2,login_1,password_2,querty_1,starwars_2,welcome_2,zxcvbnm_2\n" +
-            "0.8939_0.8815\n" +
-            "111111_1,123456_0,donald_1,login_0,hellow_1,password_0,starwars_1,welcome_1,zxcvbnm_1").split("\n");
+            "0.4654_0.5026\n" +
+            "111111_1,123456_0,donald_1,google_0,login_1,password_0,starwars_1,welcome_1,zxcvbnm_1").split("\n");
 
     //TO RUN THIS CHECKER, javac -version and java -version MUST SHOW VALUES IN CMD
     public static void main(String[] args) {
@@ -33,6 +33,9 @@ public class Main {
                 }
                 lineInd++;
                 line = theirsRdr.readLine();
+            }
+            if (lineInd < 5) {
+                hasPassed = false;
             }
             String toPrint;
             toPrint = hasPassed ? "You have passed! :)" : "You have not passed";
