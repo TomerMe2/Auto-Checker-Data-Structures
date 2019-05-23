@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeoutException;
 
 public class Main {
@@ -15,9 +16,9 @@ public class Main {
     public static void main(String[] args) {
         try {
             String workingDir = System.getProperty("user.dir");
-            Process cmndPr = Runtime.getRuntime().exec("javac -d " + workingDir + " src\\*.java");
+            Process cmndPr = Runtime.getRuntime().exec("javac " + workingDir + "\\*.java");
             cmndPr.waitFor();
-            executeCommandLine("java Runner 32 32 2", 4000);
+            executeCommandLine("java Runner 32 32 2", 5000);
             BufferedReader theirsRdr = new BufferedReader(new FileReader("output.txt"));
             String line = theirsRdr.readLine();
             boolean hasPassed = true;
