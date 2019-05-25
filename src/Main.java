@@ -1,7 +1,6 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Main {
@@ -16,6 +15,27 @@ public class Main {
     public static void main(String[] args) {
         try {
             String workingDir = System.getProperty("user.dir");
+            File outputTxt = new File(workingDir + "\\output.txt");
+            System.out.println(outputTxt.getAbsolutePath());
+            outputTxt.delete();
+            File dir = new File(workingDir);
+            File [] files = dir.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.endsWith(".class");
+                }
+            });
+            List<File> lstOfClassesFiles = new ArrayList<>();
+            if (files != null) {
+                for (File fl: files) {
+                    if (fl.isFile()) {
+                        lstOfClassesFiles.add(fl);
+                    }
+                }
+            }
+            for(int i = 0; i < lstOfClassesFiles.size(); i++) {
+                lstOfClassesFiles.get(i).delete();
+            }
             Process cmndPr = Runtime.getRuntime().exec("javac " + workingDir + "\\*.java");
             cmndPr.waitFor();
             executeCommandLine("java Runner 32 32 2", 5000);
