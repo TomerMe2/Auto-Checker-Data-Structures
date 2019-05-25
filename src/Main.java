@@ -15,8 +15,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             String workingDir = System.getProperty("user.dir");
-            File outputTxt = new File(workingDir + "\\output.txt");
-            System.out.println(outputTxt.getAbsolutePath());
+            File outputTxt = new File("output.txt");
             outputTxt.delete();
             File dir = new File(workingDir);
             File [] files = dir.listFiles(new FilenameFilter() {
@@ -36,7 +35,7 @@ public class Main {
             for(int i = 0; i < lstOfClassesFiles.size(); i++) {
                 lstOfClassesFiles.get(i).delete();
             }
-            Process cmndPr = Runtime.getRuntime().exec("javac " + workingDir + "\\*.java");
+            Process cmndPr = Runtime.getRuntime().exec("javac Runner.java");
             cmndPr.waitFor();
             executeCommandLine("java Runner 32 32 2", 5000);
             BufferedReader theirsRdr = new BufferedReader(new FileReader("output.txt"));
