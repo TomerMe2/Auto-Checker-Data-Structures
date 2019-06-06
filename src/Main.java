@@ -17,10 +17,13 @@ import static java.lang.System.exit;
 
 public class Main {
 
-    //TODO: every exec should follow buffered readers as i did in running their code
-    private static String runnerLoc = "C:\\DSchecking";
-    private static String innerFolderName = "thiersDir";
-
+    private static String runnerLocWithDelete = "C:\\DSchecking\\RunnerWithDelete";
+    private static String runnerLocWithoutDelete = "C:\\DSchecking\\RunnerWithoutDelete";
+    private static String innerFolderNameWithoutSrc = "thiersDir";
+    private static String innerFolderNameWithSrc = "thiersDir\\src";
+    private static String fullPathForOutputTxt = "C:\\DSchecking\\Checking\\thiersDir\\src\\output.txt";
+    private static String[] flNmsToDel = {"output.txt", "requested_passwords.txt", "hash_functions.txt",
+            "bad_passwords.txt", "delete_keys.txt", "Runner.java"};
     public static void main(String[] args) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("ds_ass4_auto_check");
@@ -31,31 +34,41 @@ public class Main {
         List<String> allZips = listOfAllZipsNames(workingDir);
         for (String zipName: allZips) {
             try {
-                String groupId = zipName.split("_")[0];
-                unZipGivenFile(workingDir + "\\" + zipName, workingDir + "\\" + innerFolderName, zipName);
+                String groupId = zipName.substring(0, zipName.indexOf('A'));
+                unZipGivenFile(workingDir + "\\" + zipName, workingDir + "\\" + innerFolderNameWithoutSrc, zipName);
                 //unZipGivenFile(workingDir + "\\" + zipName, workingDir + "\\" + innerFolderName, zipName, workingDir);
-                moveFileToGivenDir(runnerLoc + "\\Runner.java", workingDir + "\\" + innerFolderName + "\\Runner.java");
-                compile(workingDir);
                 List<String> testsResult = new ArrayList<>();
                 testsResult.add(groupId);
                 for (int i = 0; i < Tests.testsDirName.length; i++) {
+                    deleteFilesFromDir(workingDir + "\\" + innerFolderNameWithSrc, flNmsToDel);
+                    deleteFilesFromDir(testerAppDir, flNmsToDel);
                     //loop over all the tests
-                    if (runIthTest(i, workingDir, testerAppDir)) {
+                    String runnerLoc;
+                    if (i == 0 || i == 7) {
+                        runnerLoc = runnerLocWithDelete;
+                    }
+                    else {
+                        runnerLoc = runnerLocWithoutDelete;
+                    }
+                    moveFileToGivenDir(runnerLoc + "\\Runner.java", workingDir + "\\" + innerFolderNameWithSrc + "\\Runner.java");
+                    compile(workingDir);
+                    if (runIthTest(i, workingDir, fullPathForOutputTxt, testerAppDir)) {
                         testsResult.add("1");
                     }
                     else {
                         testsResult.add("0");
                     }
                 }
-                deleteAllFilesFromDir(workingDir + "\\" + innerFolderName, workingDir);
-                String textDesc = "";
+                deleteAllFilesFromDir(workingDir + "\\" + innerFolderNameWithoutSrc, workingDir);
+                StringBuilder textDesc = new StringBuilder();
                 int counter = 0;
                 for (String tstRes: testsResult) {
                     if (tstRes.equals("0")) {
-                        textDesc = "failed test " + counter + "\n";
+                        textDesc.append("failed test ").append(counter).append("\n");
                     }
                     counter++;
                 }
+                testsResult.add(textDesc.toString());
                 lastRow = writeLineToExcel(testsResult, sheet, lastRow);
             }
             catch (Exception e) {
@@ -112,12 +125,7 @@ public class Main {
     //tested
     public static List<String> listOfAllZipsNames(String dirPath) {
         File dir = new File(dirPath);
-        File [] files = dir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".zip");
-            }
-        });
+        File [] files = dir.listFiles((dir1, name) -> name.endsWith(".zip"));
         List<String> lst = new ArrayList<>();
         if (files != null) {
             for (File fl: files) {
@@ -131,10 +139,15 @@ public class Main {
 
     //call this after compilation
     //returns true iff their code passed the test
-    public static boolean runIthTest(int testNum, String workingDir, String testerDir) throws IOException, InterruptedException, TimeoutException {
-        copyDirConetentToNewDir(Tests.testsLoc + "\\" + Tests.testsDirName[testNum], testerDir);
-        //executeCommandLine("java " + workingDir + "\\Runner 32 32 2", 4000);
-        Process pr = Runtime.getRuntime().exec("java -cp C:\\DSchecking\\Checking\\thiersDir Runner 32 2 2");
+    public static boolean runIthTest(int testNum, String workingDir, String fullPthToOutput, String testerRunningDir) throws IOException, InterruptedException, TimeoutException {
+        copyDirConetentToNewDir(Tests.testsLoc + "\\" + Tests.testsDirName[testNum], testerRunningDir);
+        executeCommandLine("java -cp C:\\DSchecking\\Checking\\thiersDir\\src Runner " + Tests.params[testNum], 4000);
+        //Process pr = Runtime.getRuntime().exec("java -cp C:\\DSchecking\\Checking\\thiersDir Runner " + Tests.params[testNum]);
+        //waitForCmnd(pr);
+        return hasTestPassed(testNum, testerRunningDir + "\\output.txt");
+    }
+
+    private static void waitForCmnd(Process pr) throws InterruptedException, IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
         String str;
         while (((str = reader.readLine()) != null)) {
@@ -143,19 +156,23 @@ public class Main {
         reader = new BufferedReader(new InputStreamReader(pr.getInputStream()));
         while ((reader.readLine() != null)) {}
         pr.waitFor();
-        //TODO: switch for this exec, and retain the buffered readers:
-        //executeCommandLine("java -cp " + workingDir + "\\" + innerFolderName + " Runner 32 2 2", 10000);
-        return hasTestPassed(testNum, testerDir + "\\output.txt");
     }
 
     public static void compile(String workingDir) throws IOException, InterruptedException {
-        Process cmndPr = Runtime.getRuntime().exec("javac " + workingDir + "\\" + innerFolderName + "\\*.java");
-        cmndPr.waitFor();
+        Process cmndPr = Runtime.getRuntime().exec("javac " + workingDir + "\\" + innerFolderNameWithSrc + "\\*.java");
+        waitForCmnd(cmndPr);
+    }
+
+    public static void deleteFilesFromDir(String dirPath, String[] filleNames) {
+        for (String flNm : filleNames) {
+            File fl = new File(dirPath + "\\" + flNm);
+            fl.delete();
+        }
     }
 
     public static void deleteAllFilesFromDir(String dirPath, String workingDir) throws IOException{
         FileUtils.deleteDirectory(new File(dirPath));
-        new File(workingDir + "\\" + innerFolderName).mkdirs();
+        new File(workingDir + "\\" + innerFolderNameWithoutSrc).mkdirs();
     }
 
     //tested
@@ -210,9 +227,10 @@ public class Main {
 
     //tested
     //outputPath can be output.txt
-    public static boolean hasTestPassed(int testNum, String outputPath) {
+    public static boolean hasTestPassed(int testNum, String outputPath) throws IOException {
+        BufferedReader theirsRdr = null;
         try {
-            BufferedReader theirsRdr = new BufferedReader(new FileReader(outputPath));
+            theirsRdr = new BufferedReader(new FileReader(outputPath));
             String line = theirsRdr.readLine();
             boolean hasPassed = true;
             int lineInd = 0;
@@ -220,7 +238,12 @@ public class Main {
                 if (lineInd > 4) {
                     hasPassed = false;
                 }
-                if (lineInd != 3) {
+                if (lineInd == 0 || lineInd == 1 || lineInd == 2) {
+                    if (!(Tests.tests[testNum][lineInd].equals(line.replace("\n", "")))) {
+                        hasPassed = false;
+                    }
+                }
+                else if (lineInd == 4 && (testNum == 0 || testNum == 7)) {
                     if (!(Tests.tests[testNum][lineInd].equals(line.replace("\n", "")))) {
                         hasPassed = false;
                     }
@@ -236,6 +259,10 @@ public class Main {
         catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+        finally {
+            if (theirsRdr != null)
+                theirsRdr.close();
         }
     }
 
