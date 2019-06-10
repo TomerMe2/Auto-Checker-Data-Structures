@@ -24,6 +24,7 @@ public class Main {
     private static String fullPathForOutputTxt = "C:\\DSchecking\\Checking\\thiersDir\\src\\output.txt";
     private static String[] flNmsToDel = {"output.txt", "requested_passwords.txt", "hash_functions.txt",
             "bad_passwords.txt", "delete_keys.txt", "Runner.java"};
+
     public static void main(String[] args) {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("ds_ass4_auto_check");
@@ -32,8 +33,10 @@ public class Main {
         String testerAppDir = System.getProperty("user.dir");
         String workingDir = "C:\\DSchecking\\Checking";
         List<String> allZips = listOfAllZipsNames(workingDir);
+        int cntGroups = 0;
         for (String zipName: allZips) {
             try {
+                System.out.println("Started group " + cntGroups);
                 String groupId = zipName.substring(0, zipName.indexOf('A'));
                 unZipGivenFile(workingDir + "\\" + zipName, workingDir + "\\" + innerFolderNameWithoutSrc, zipName);
                 //unZipGivenFile(workingDir + "\\" + zipName, workingDir + "\\" + innerFolderName, zipName, workingDir);
@@ -70,10 +73,11 @@ public class Main {
                 }
                 testsResult.add(textDesc.toString());
                 lastRow = writeLineToExcel(testsResult, sheet, lastRow);
+                cntGroups++;
             }
             catch (Exception e) {
                 e.printStackTrace();
-                exit(1);
+                //exit(1);
             }
         }
         try (FileOutputStream outputStream = new FileOutputStream("ds_ass4_auto_check.xls")) {
@@ -257,7 +261,8 @@ public class Main {
             return hasPassed;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            //output file not found
             return false;
         }
         finally {
