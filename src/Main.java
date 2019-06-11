@@ -249,7 +249,10 @@ public class Main {
                 }
                 else if (lineInd == 4 && (testNum == 0 || testNum == 7)) {
                     if (!(Tests.tests[testNum][lineInd].equals(line.replace("\n", "")))) {
-                        hasPassed = false;
+                        //check if it equals to the test line with , at the end
+                        if (!((Tests.tests[testNum][lineInd] + ",").equals(line.replace("\n", "")))) {
+                            hasPassed = false;
+                        }
                     }
                 }
                 lineInd++;

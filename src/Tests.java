@@ -20,6 +20,7 @@ public class Tests {
             "111111_2,123456_2,123789_2,42_1,7777_2,8888_2,9999_2,42_1,burgers4life_2,checkcheck_2,donald_0,google_2,hellow_2,donald_1,morepasswordsssssss_2,password_2,querty_2,donald_1,filreonthesurfer_2,headphones_2,hibye_2,hwello_2,speakers_1,welcome_2,zxcvbnm_2")
             .split("\n");
 
+
     private static String[] outTest3 = ("0.5238095238095238\n" +
             "24\n" +
             "0gldqc_2,111111_2,123456_2,123789_2,42_1,7777_2,8888_2,9999_2,42_1,72stusakjn_2,allgood_2,burgers4life_2,checkcheck_1,djnvkdnvk_2,dkjfnkvn8934h5itrnfk_2,donald_0,google_2,hellow_2,donald_1,morepasswords_2,password_2,querty_2,donald_1,fghj_2,headphones_2,hibye_2,hkjnmkjh_2,donald_0,dtvsiiii_2,kay_2,kdjnksnkjniu34567tf_2,keyskeyskeyskeys_2,lalalala_1,lalnfldfmsi_2,mana_2,miomdsvoindoin_2,mmmm_2,lalalala_1,morekeys_2,moresearchtime_2,ndskdnjkdnsk_2,donald_0,eldjkjfsadfgd_2,erkgjkjssgdfgsg_2,genl9u_1,jndkvnfjlsmcslirlemdovfdjrmgfbv_2,jnvkd_2,kejdgdkdlnasflrnfv_2,kerofhsdkfjsdfdsfsdfdgfdgsd_2,kwdjfbfkdjvnd_1,lsdjhfgds_2,nvkdnknsjk43_2,kwdjfbfkdjvnd_1,rtyu_2,somethingsomething_2,donald_0,gazilionpasswords_2,gojirashlita_2,hugedbofpasswords_2,notfinishedyet_2,pppppppppppp_1,slash_2,vvvvvvvvvvvvvv_2,pppppppppppp_1,ntuc453465jkd_2,pwqisdjkne_2,sdfnkjd_2,poiu_1,sadkje56tg_2,trekjnskdrk_2,wehavemore_2,zxcvbnm_2,zzzzzzzzzzzzz_2\n" +
