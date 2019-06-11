@@ -37,6 +37,7 @@ public class Main {
         for (String zipName: allZips) {
             try {
                 System.out.println("Started group " + cntGroups);
+                cntGroups++;
                 String groupId = zipName.substring(0, zipName.indexOf('A'));
                 unZipGivenFile(workingDir + "\\" + zipName, workingDir + "\\" + innerFolderNameWithoutSrc, zipName);
                 //unZipGivenFile(workingDir + "\\" + zipName, workingDir + "\\" + innerFolderName, zipName, workingDir);
@@ -53,13 +54,13 @@ public class Main {
                     else {
                         runnerLoc = runnerLocWithoutDelete;
                     }
-                    moveFileToGivenDir(runnerLoc + "\\Runner.java", workingDir + "\\" + innerFolderNameWithSrc + "\\Runner.java");
-                    compile(workingDir);
-                    if (runIthTest(i, workingDir, fullPathForOutputTxt, testerAppDir)) {
-                        testsResult.add("1");
-                    }
-                    else {
-                        testsResult.add("0");
+                  moveFileToGivenDir(runnerLoc + "\\Runner.java", workingDir + "\\" + innerFolderNameWithSrc + "\\Runner.java");
+                        compile(workingDir);
+                        if (runIthTest(i, workingDir, fullPathForOutputTxt, testerAppDir)) {
+                            testsResult.add("1");
+                        }
+                        else {
+                            testsResult.add("0");
                     }
                 }
                 deleteAllFilesFromDir(workingDir + "\\" + innerFolderNameWithoutSrc, workingDir);
@@ -67,13 +68,12 @@ public class Main {
                 int counter = 0;
                 for (String tstRes: testsResult) {
                     if (tstRes.equals("0")) {
-                        textDesc.append("failed test ").append(counter).append("\n");
+                        textDesc.append("failed test ").append(counter - 1).append("\n");
                     }
                     counter++;
                 }
                 testsResult.add(textDesc.toString());
                 lastRow = writeLineToExcel(testsResult, sheet, lastRow);
-                cntGroups++;
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -143,9 +143,14 @@ public class Main {
 
     //call this after compilation
     //returns true iff their code passed the test
-    public static boolean runIthTest(int testNum, String workingDir, String fullPthToOutput, String testerRunningDir) throws IOException, InterruptedException, TimeoutException {
+    public static boolean runIthTest(int testNum, String workingDir, String fullPthToOutput, String testerRunningDir) throws IOException, InterruptedException {
         copyDirConetentToNewDir(Tests.testsLoc + "\\" + Tests.testsDirName[testNum], testerRunningDir);
-        executeCommandLine("java -cp C:\\DSchecking\\Checking\\thiersDir\\src Runner " + Tests.params[testNum], 4000);
+        try {
+            executeCommandLine("java -cp C:\\DSchecking\\Checking\\thiersDir\\src Runner " + Tests.params[testNum], 4000);
+        }
+        catch (TimeoutException e) {
+            return false;
+        }
         //Process pr = Runtime.getRuntime().exec("java -cp C:\\DSchecking\\Checking\\thiersDir Runner " + Tests.params[testNum]);
         //waitForCmnd(pr);
         return hasTestPassed(testNum, testerRunningDir + "\\output.txt");
