@@ -77,7 +77,6 @@ public class Main {
             }
             catch (Exception e) {
                 e.printStackTrace();
-                //exit(1);
             }
         }
         try (FileOutputStream outputStream = new FileOutputStream("ds_ass4_auto_check.xls")) {
