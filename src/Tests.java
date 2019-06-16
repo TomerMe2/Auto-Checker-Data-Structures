@@ -156,7 +156,7 @@ public class Tests {
     public static final String[][] tests = {outTest1, outTest2, outTest3, outTest4};
 
 
-    public static final String[] testsDirName = {"Tst1", "Tst2", "Tst3", "Tst4"};
+    public static final String[] testsDirName = {"Tst15", "Tst0", "Tst6", "Tst12"};
 
     public static final String[] params = {"32 2 2", "32 2 2", "40 4 9", "32 2 2"};
 }
