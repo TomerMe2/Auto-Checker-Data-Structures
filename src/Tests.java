@@ -1,5 +1,6 @@
 public class Tests {
 
+    /*
     //checks remove too!
     private static  String[] outTest0 = ("0.5\n" +
             "16\n" +
@@ -116,4 +117,46 @@ public class Tests {
 
     public static String[] params = {"32 2 2", "100 4 2", "300 5 3", "200 5 3", "25 2 2", "200 5 2", "40 4 9", "32 2 2",
             "29 3 3", "40 4 4", "50 3 4", "45 5 5", "32 2 2", "32 2 2", "32 2 2", "32 2 2", "32 2 2"};
+
+     */
+
+    //new Tst1 is Tst15 (no delete check)
+    //new Tst2 is Tst0 (with delete check)
+    //new Tst3 is Tst6 (no delete check)
+    //new Tst4 is Tst12 (no delete check)
+
+    public static final String[] outTest1 = ("0.5\n" +
+            "16\n" +
+            "111111_2,123456_1,donald_2,google_0,hellow_2,login_1,password_2,querty_1,starwars_2,welcome_2,zxcvbnm_2\n" +
+            "0.3933_0.4249\n" +
+            "111111_1,123456_0,donald_1,google_0,login_1,password_0,starwars_1,welcome_1,zxcvbnm_1").split("\n");
+
+    //checks remove too
+    public static final String[] outTest2 = ("0.5\n" +
+            "16\n" +
+            "111111_2,123456_1,donald_2,google_0,hellow_2,login_1,password_2,querty_1,starwars_2,welcome_2,zxcvbnm_2\n" +
+            "0.3933_0.4249\n" +
+            "111111_1,123456_0,donald_1,google_0,login_1,password_0,starwars_1,welcome_1,zxcvbnm_1").split("\n");
+
+    public static final String[] outTest3 = ("0.5714285714285714\n" +
+            "6\n" +
+            "111111_1,123456_1,42_1,9999_1,bgushlita_1,burgers4life_1,checkcheck_1,donald_1,google_0,hellow_1,login_1,morepasswords_1,pass10_1,pass11_1,pass12_1,pass2_1,pass3_1,pass4_1,pass5_1,pass6_0,pass7_1,pass8_1,pass9_1,password_1,querty_1,starwars_1,welcome_1,zxcvbnm_1\n" +
+            "0.2947_0.5566\n" +
+            "111111_1,123456_1,42_1,9999_1,bgushlita_1,burgers4life_1,checkcheck_1,donald_1,google_0,login_1,morepasswords_1,pass10_1,pass11_1,pass12_1,pass2_1,pass3_1,pass4_1,pass5_0,pass6_1,pass7_1,pass8_1,pass9_1,password_1,starwars_1,welcome_1,zxcvbnm_1")
+            .split("\n");
+
+    public static final String[] outTest4 = ("0.0\n" +
+            "0\n" +
+            "justme_0\n" +
+            "0.3167_0.3701\n" +
+            "justme_0").split("\n");
+
+    public static final String testsLoc = "C:\\DSchecking\\Tests";
+
+    public static final String[][] tests = {outTest1, outTest2, outTest3, outTest4};
+
+
+    public static final String[] testsDirName = {"Tst1", "Tst2", "Tst3", "Tst4"};
+
+    public static final String[] params = {"32 2 2", "32 2 2", "40 4 9", "32 2 2"};
 }

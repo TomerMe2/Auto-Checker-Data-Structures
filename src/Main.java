@@ -48,7 +48,7 @@ public class Main {
                     deleteFilesFromDir(testerAppDir, flNmsToDel);
                     //loop over all the tests
                     String runnerLoc;
-                    if (i == 0 || i == 7) {
+                    if (i == 1) {
                         runnerLoc = runnerLocWithDelete;
                     }
                     else {
@@ -248,7 +248,22 @@ public class Main {
                 }
                 if (lineInd == 0 || lineInd == 1 || lineInd == 2) {
                     if (!(Tests.tests[testNum][lineInd].equals(line.replace("\n", "")))) {
-                        hasPassed = false;
+                        //check for doubles and stuff
+                        if (lineInd == 0 || lineInd == 1) {
+                            try {
+                                double theirs = Double.parseDouble(line.replace("\n", ""));
+                                double ours = Double.parseDouble(Tests.tests[testNum][lineInd]);
+                                if (theirs > ours + 0.001 || theirs < ours - 0.001) {
+                                    hasPassed = false;
+                                }
+                            }
+                            catch (Exception e) {
+                                hasPassed = false;
+                            }
+                        }
+                        else {
+                            hasPassed = false;
+                        }
                     }
                 }
                 else if (lineInd == 4 && (testNum == 0 || testNum == 7)) {
@@ -268,7 +283,6 @@ public class Main {
             return hasPassed;
         }
         catch (Exception e) {
-            //e.printStackTrace();
             //output file not found
             return false;
         }
@@ -293,7 +307,8 @@ public class Main {
         List<String> menu = new ArrayList<>();
         menu.add("groupId");
         for (int i = 0; i < Tests.testsDirName.length; i++) {
-            menu.add("Test" + i);
+            int tstNum = i + 1;
+            menu.add("Test" + tstNum);
         }
         menu.add("Text");
         return writeLineToExcel(menu, sht, 0);
