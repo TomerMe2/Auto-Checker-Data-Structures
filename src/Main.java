@@ -150,8 +150,6 @@ public class Main {
         catch (TimeoutException e) {
             return false;
         }
-        //Process pr = Runtime.getRuntime().exec("java -cp C:\\DSchecking\\Checking\\thiersDir Runner " + Tests.params[testNum]);
-        //waitForCmnd(pr);
         return hasTestPassed(testNum, testerRunningDir + "\\output.txt");
     }
 
@@ -211,8 +209,6 @@ public class Main {
             for (File fl : filesInDir) {
                 if (fl.isFile()) {
                     fl.renameTo(new File(destPath + "\\" + fl.getName()));
-                    //File dest = new File(destPath);
-                    //Files.move(srcDir.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
             }
         }
@@ -226,8 +222,6 @@ public class Main {
                 if (fl.isFile()) {
                     File dest = new File(destPath + "\\" + fl.getName());
                     Files.copy(fl.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    //File dest = new File(destPath);
-                    //Files.move(srcDir.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
             }
         }
